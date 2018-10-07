@@ -26,7 +26,7 @@ import { GeneralERC20 } from "../../../lib/GeneralERC20.sol";
 import { TokenInteract } from "../../../lib/TokenInteract.sol";
 import { ExchangeReader } from "../../interfaces/ExchangeReader.sol";
 import { ExchangeWrapper } from "../../interfaces/ExchangeWrapper.sol";
-import { IMarket } from "../../augur-core/source/contracts/reporting/IMarket.sol"
+import { IMarket } from "../../augur-core/source/contracts/reporting/IMarket.sol";
 
 contract ITrade {
     function publicFillBestOrder(Order.TradeDirections _direction, IMarket _market, uint256 _outcome, uint256 _amount, uint256 _price, uint256 _tradeGroupID) external returns (uint256);
@@ -94,12 +94,12 @@ contract AugurWrapper is
 
     constructor(
         address augurTradeContract,
-        address augurSolContract,
+        address augurSolContract
     )
         public
     {
         AUGUR_TRADING_CONTRACT = augurTradeContract;
-        AUGUR_SOL  augurSolContract
+        AUGUR_SOL  augurSolContract;
     }
 
     // ============ Public Functions ============
@@ -152,8 +152,9 @@ contract AugurWrapper is
         );
 
         altOutcome = 0;
-        if(order.outcome == 0):
+        if(order.outcome == 0) {
             altOutcome = 1;
+        }
         
         balanceBefore = ERC20(IMarket(marketAddress).getShareToken(order.outcome)).balance(this);
         ITrade(AUGUR_TRADING_CONTRACT).publicFillBestOrder(order.direction, order.marketAddress, order.outcome, order,amount, order.price, 0, 1, false);
